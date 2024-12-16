@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import OptimizedImage from '../common/OptimizedImage';
 
 interface Wine {
   name: string;
@@ -84,11 +85,11 @@ const FeaturedWines = () => {
               onTouchEnd={handleTouchEnd}
             >
               <div className="relative aspect-[3/4] overflow-hidden">
-                <img
+                <OptimizedImage
                   src={wine.image}
                   alt={wine.name}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               </div>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import OptimizedImage from '../common/OptimizedImage';
 
 const HomeHero = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState<boolean[]>([]);
 
   const images = [
     '/images/banner/MBD_ElginValley-03689 (1).jpg',
@@ -11,22 +12,21 @@ const HomeHero = () => {
     '/images/banner/wines-of-elgin-oak-valley-936B1084.webp'
   ];
 
-  // Preload images
+  // Initialize imagesLoaded array
   useEffect(() => {
-    images.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
+    setImagesLoaded(new Array(images.length).fill(false));
   }, []);
 
-  // Auto-rotate images
+  // Auto-rotate images only after first image is loaded
   useEffect(() => {
+    if (!imagesLoaded[0]) return;
+
     const timer = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [imagesLoaded]);
 
   // Handle touch events for swipe
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -52,9 +52,22 @@ const HomeHero = () => {
     setTouchStart(null);
   };
 
-  const handleImageLoad = () => {
-    setImageLoaded(true);
+  const handleImageLoad = (index: number) => {
+    setImagesLoaded(prev => {
+      const newState = [...prev];
+      newState[index] = true;
+      return newState;
+    });
   };
+
+  // If first image hasn't loaded, show loading state
+  if (!imagesLoaded[0]) {
+    return (
+      <div className="relative h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div 
@@ -70,12 +83,13 @@ const HomeHero = () => {
             currentImageIndex === index ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <img
+          <OptimizedImage
             src={image}
             alt={`Elgin Hills ${index + 1}`}
             className="w-full h-full object-cover"
-            onLoad={handleImageLoad}
-            loading={index === 0 ? 'eager' : 'lazy'}
+            priority={index === 0}
+            sizes="100vw"
+            onLoad={() => handleImageLoad(index)}
           />
           <div className="absolute inset-0 bg-black/30" />
         </div>
