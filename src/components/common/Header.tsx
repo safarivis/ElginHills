@@ -1,67 +1,81 @@
-import React from 'react';
-import { Menu, X, Apple } from 'lucide-react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
   const navItems = [
-    { name: 'Apples', href: '/' },
-    { name: 'Wines', href: '/wine' },
-    { name: 'Visit', href: '/visit' },
-    { name: 'About', href: '/about' },
-    { name: 'Shop', href: '/shop' }
+    { path: '/', label: 'Home' },
+    { path: '/wine', label: 'Wine' },
+    { path: '/visit', label: 'Visit' },
+    { path: '/about', label: 'About' }
   ];
 
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
-    <header className="absolute w-full z-50">
-      <nav className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center">
-            <Apple className="h-8 w-8 text-white" />
-            <span className="ml-2 text-2xl font-serif text-white">Elgin Hills</span>
+    <header className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
+      <div className="container mx-auto px-6">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
+          <Link to="/" className="text-2xl font-serif">
+            Elgin Hills
           </Link>
-          
-          <div className="hidden md:flex space-x-8">
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            <div className="w-6 h-5 relative flex flex-col justify-between">
+              <span className={`w-full h-0.5 bg-gray-800 transform transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`w-full h-0.5 bg-gray-800 transition-opacity duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-full h-0.5 bg-gray-800 transform transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+            </div>
+          </button>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex space-x-8">
             {navItems.map((item) => (
               <Link
-                key={item.name}
-                to={item.href}
-                className={`text-white hover:text-gray-300 transition-colors ${
-                  location.pathname === item.href ? 'border-b-2 border-white' : ''
+                key={item.path}
+                to={item.path}
+                className={`text-lg hover:text-gray-600 transition-colors duration-200 ${
+                  isActive(item.path) ? 'border-b-2 border-gray-800' : ''
                 }`}
               >
-                {item.name}
+                {item.label}
               </Link>
             ))}
-          </div>
-
-          <button 
-            className="md:hidden text-white"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X /> : <Menu />}
-          </button>
+          </nav>
         </div>
 
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 bg-white/10 backdrop-blur-md rounded-lg p-4">
+        {/* Mobile Navigation */}
+        <div
+          className={`md:hidden absolute left-0 right-0 bg-white/95 backdrop-blur-sm shadow-lg transition-all duration-300 ease-in-out ${
+            isMenuOpen ? 'max-h-64 py-4' : 'max-h-0'
+          } overflow-hidden`}
+        >
+          <nav className="flex flex-col space-y-4 px-6">
             {navItems.map((item) => (
               <Link
-                key={item.name}
-                to={item.href}
-                className={`block py-2 text-white hover:text-gray-300 transition-colors ${
-                  location.pathname === item.href ? 'font-semibold' : ''
-                }`}
+                key={item.path}
+                to={item.path}
                 onClick={() => setIsMenuOpen(false)}
+                className={`text-lg py-2 ${
+                  isActive(item.path) ? 'text-gray-800 font-medium' : 'text-gray-600'
+                }`}
               >
-                {item.name}
+                {item.label}
               </Link>
             ))}
-          </div>
-        )}
-      </nav>
+          </nav>
+        </div>
+      </div>
     </header>
   );
 };
