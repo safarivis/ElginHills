@@ -26,8 +26,8 @@ const AboutUs = () => {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto text-center mb-16">
-          <h2 className="text-4xl font-serif mb-6">About Us</h2>
-          <p className="text-gray-600 mb-8">
+          <h2 className="text-5xl font-serif text-center mb-6">About Us</h2>
+          <p className="text-xl text-gray-600 text-center max-w-3xl mx-auto mb-16">
             Nestled in South Africa's renowned Elgin Valley, Elgin Hills Apple Farm is more than an orchard—it's a legacy in the making. 
             Our modern approach to farming honors the region's rich agricultural heritage, while pushing forward with innovation, 
             sustainability, and a focus on global markets.
@@ -45,7 +45,7 @@ const AboutUs = () => {
                 />
               </div>
               <h3 className="text-2xl font-serif mb-2">{founder.name}</h3>
-              <h4 className="text-gray-600 font-medium mb-4">{founder.role}</h4>
+              <h4 className="text-xl text-gray-600 font-medium mb-4">{founder.role}</h4>
               <p className="text-gray-600">{founder.description}</p>
             </div>
           ))}

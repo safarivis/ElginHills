@@ -54,8 +54,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   };
 
   const handleError = () => {
-    setError(true);
     setLoading(false);
+    setError(true);
   };
 
   return (
@@ -63,7 +63,11 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       {!priority && loading && !error && (
         <div 
           className="absolute inset-0 bg-gray-200 animate-pulse"
-          style={{ backgroundImage: `url(${blurDataURL})` }}
+          style={{
+            backgroundImage: `url(${blurDataURL})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
         />
       )}
       <img

@@ -27,7 +27,7 @@ const FeaturedWines = () => {
     {
       name: "Reserve Chardonnay",
       description: "Elegant and crisp with hints of apple and vanilla",
-      image: "/images/wines/Chardonnayjpg.jpg",
+      image: "https://images.unsplash.com/photo-1598306442928-4d90f32c6866?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
       details: [
         'Vintage: 2023',
         'Region: Elgin Valley',
@@ -59,8 +59,6 @@ const FeaturedWines = () => {
     const touchEnd = e.changedTouches[0].clientY;
     const diff = touchStart - touchEnd;
 
-    // If the user swiped up more than 50px, keep the details open
-    // Otherwise, close them
     if (Math.abs(diff) < 50) {
       setActiveWine(null);
     }
@@ -85,11 +83,10 @@ const FeaturedWines = () => {
               onTouchEnd={handleTouchEnd}
             >
               <div className="relative aspect-[3/4] overflow-hidden">
-                <OptimizedImage
+                <img
                   src={wine.image}
                   alt={wine.name}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               </div>
@@ -100,7 +97,6 @@ const FeaturedWines = () => {
                   {wine.description}
                 </p>
 
-                {/* Wine Details - Shown on touch/hover */}
                 <div 
                   className={`space-y-2 transition-all duration-300 origin-bottom
                     ${activeWine === index ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}`}
@@ -112,14 +108,6 @@ const FeaturedWines = () => {
                     </div>
                   ))}
                 </div>
-
-                <button 
-                  className="mt-4 bg-white/10 backdrop-blur-sm border border-white/20 px-6 py-2 rounded-full
-                    hover:bg-white/20 transition-all duration-300 text-sm
-                    active:scale-95 touch-manipulation"
-                >
-                  Learn More
-                </button>
               </div>
             </div>
           ))}
